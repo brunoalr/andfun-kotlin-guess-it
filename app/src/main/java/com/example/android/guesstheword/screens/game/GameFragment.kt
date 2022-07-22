@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -61,13 +62,20 @@ class GameFragment : Fragment() {
             viewModel.onSkip()
         }
 
-	/** Setting up LiveData observation relationship **/        
-	viewModel.score.observe(viewLifecycleOwner) { newScore ->
+        /** Setting up LiveData observation relationship **/
+        viewModel.score.observe(viewLifecycleOwner) { newScore ->
             binding.scoreText.text = newScore.toString()
         }
 
         viewModel.word.observe(viewLifecycleOwner) { newWord ->
             binding.wordText.text = newWord
+        }
+
+        viewModel.eventGameFinish.observe(viewLifecycleOwner) { hasFinished ->
+            if (hasFinished) {
+                gameFinished()
+                viewModel.onGameFinishComplete()
+            }
         }
 
         return binding.root
