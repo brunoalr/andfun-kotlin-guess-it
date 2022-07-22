@@ -17,6 +17,7 @@
 package com.example.android.guesstheword.screens.game
 
 import android.os.Bundle
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,15 +38,17 @@ class GameFragment : Fragment() {
 
     private lateinit var binding: GameFragmentBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
         // Inflate view and obtain an instance of the binding class
         binding = DataBindingUtil.inflate(
-                inflater,
-                R.layout.game_fragment,
-                container,
-                false
+            inflater,
+            R.layout.game_fragment,
+            container,
+            false
         )
 
         // Get the viewmodel
@@ -67,18 +70,19 @@ class GameFragment : Fragment() {
             binding.scoreText.text = newScore.toString()
         })
 
-        // TODO (07) Setup an observer relationship to update binding.timerText
-        // You can use DateUtils.formatElapsedTime to correctly format the long to a time string
+        viewModel.currentTime.observe(viewLifecycleOwner) { currentTime ->
+            binding.timerText.text = DateUtils.formatElapsedTime(currentTime)
+        }
 
         // Sets up event listening to navigate the player when the game is finished
-        viewModel.eventGameFinish.observe(viewLifecycleOwner, Observer { isFinished ->
+        viewModel.eventGameFinish.observe(viewLifecycleOwner) { isFinished ->
             if (isFinished) {
                 val currentScore = viewModel.score.value ?: 0
                 val action = GameFragmentDirections.actionGameToScore(currentScore)
                 findNavController(this).navigate(action)
                 viewModel.onGameFinishComplete()
             }
-        })
+        }
 
         return binding.root
 
