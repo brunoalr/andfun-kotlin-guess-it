@@ -16,7 +16,9 @@
 
 package com.example.android.guesstheword.screens.game
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.navigation.fragment.NavHostFragment
 
 
 /**
@@ -35,40 +37,48 @@ class GameViewModel : ViewModel() {
 
     // The list of words - the front of the list is the next word to guess
     private lateinit var wordList: MutableList<String>
-
+    // TODO (06) Once you've copied over the variables and methods, remove any code referring back
+    // to the GameFragment. You can also clean up the log statements from the last step.
 
     init {
+        Log.i("GameViewModel", "GameViewModel created!")
         resetList()
         nextWord()
         // TODO (03) Initialize score.value to 0
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        Log.i("GameViewModel", "GameViewModel destroyed!")
+    }
+
+    // TODO (02) Move over methods resetList, nextWord, onSkip and onCorrect to the GameViewModel
     /**
      * Resets the list of words and randomizes the order
      */
     private fun resetList() {
         wordList = mutableListOf(
-                "queen",
-                "hospital",
-                "basketball",
-                "cat",
-                "change",
-                "snail",
-                "soup",
-                "calendar",
-                "sad",
-                "desk",
-                "guitar",
-                "home",
-                "railway",
-                "zebra",
-                "jelly",
-                "car",
-                "crow",
-                "trade",
-                "bag",
-                "roll",
-                "bubble"
+            "queen",
+            "hospital",
+            "basketball",
+            "cat",
+            "change",
+            "snail",
+            "soup",
+            "calendar",
+            "sad",
+            "desk",
+            "guitar",
+            "home",
+            "railway",
+            "zebra",
+            "jelly",
+            "car",
+            "crow",
+            "trade",
+            "bag",
+            "roll",
+            "bubble"
         )
         wordList.shuffle()
     }
@@ -79,7 +89,7 @@ class GameViewModel : ViewModel() {
     private fun nextWord() {
         //Select and remove a word from the list
         if (wordList.isEmpty()) {
-            // gameFinished() should happen here
+            // gameFinished()
         } else {
             word = wordList.removeAt(0)
         }

@@ -17,12 +17,14 @@
 package com.example.android.guesstheword.screens.game
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.example.android.guesstheword.R
 import com.example.android.guesstheword.databinding.GameFragmentBinding
@@ -36,20 +38,24 @@ class GameFragment : Fragment() {
 
     private lateinit var binding: GameFragmentBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
         // Inflate view and obtain an instance of the binding class
         binding = DataBindingUtil.inflate(
-                inflater,
-                R.layout.game_fragment,
-                container,
-                false
+            inflater,
+            R.layout.game_fragment,
+            container,
+            false
         )
 
-        // Get the viewmodel
+        Log.i("GameFragment", "Called ViewModelProvider.get")
         viewModel = ViewModelProvider(this).get(GameViewModel::class.java)
 
+        // TODO (04) Update these onClickListeners to refer to call methods in the ViewModel then
+        // update the UI
         binding.correctButton.setOnClickListener {
             viewModel.onCorrect()
             updateScoreText()
@@ -72,11 +78,11 @@ class GameFragment : Fragment() {
     /**
      * Called when the game is finished
      */
-    fun gameFinished() {
+    private fun gameFinished() {
         // TODO (06) Add a null safety check here - you can use the elvis operator to pass 0 if
         // the LiveData is null
         val action = GameFragmentDirections.actionGameToScore(viewModel.score)
-        findNavController(this).navigate(action)
+        NavHostFragment.findNavController(this).navigate(action)
     }
 
     /** Methods for updating the UI **/
