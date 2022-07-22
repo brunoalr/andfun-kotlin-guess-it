@@ -17,6 +17,7 @@
 package com.example.android.guesstheword.screens.game
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.NavHostFragment
 
@@ -26,33 +27,21 @@ import androidx.navigation.fragment.NavHostFragment
  */
 class GameViewModel : ViewModel() {
 
-    // TODO (01) Wrap word and score in MutableLiveData
     // The current word
-    var word = ""
+    val word = MutableLiveData<String>()
 
     // The current score
-    var score = 0
-    // TODO (02) Change references to score and word to score.value and word.value and add the
-    // require null safety checks
+    val score = MutableLiveData<Int>()
 
     // The list of words - the front of the list is the next word to guess
     private lateinit var wordList: MutableList<String>
-    // TODO (06) Once you've copied over the variables and methods, remove any code referring back
-    // to the GameFragment. You can also clean up the log statements from the last step.
 
     init {
-        Log.i("GameViewModel", "GameViewModel created!")
         resetList()
         nextWord()
-        // TODO (03) Initialize score.value to 0
+        score.value = 0
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        Log.i("GameViewModel", "GameViewModel destroyed!")
-    }
-
-    // TODO (02) Move over methods resetList, nextWord, onSkip and onCorrect to the GameViewModel
     /**
      * Resets the list of words and randomizes the order
      */
@@ -91,19 +80,19 @@ class GameViewModel : ViewModel() {
         if (wordList.isEmpty()) {
             // gameFinished()
         } else {
-            word = wordList.removeAt(0)
+            word.value = wordList.removeAt(0)
         }
     }
 
     /** Methods for buttons presses **/
 
     fun onSkip() {
-        score--
+        score.value = score.value?.minus(1)
         nextWord()
     }
 
     fun onCorrect() {
-        score++
+        score.value = score.value?.plus(1)
         nextWord()
     }
 }
