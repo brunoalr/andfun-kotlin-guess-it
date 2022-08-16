@@ -74,8 +74,10 @@ class GameFragment : Fragment() {
         }
 
         viewModel.eventBuzz.observe(viewLifecycleOwner) { buzzType ->
-            buzz(buzzType.pattern)
-            viewModel.onBuzzComplete()
+            if (buzzType !=  GameViewModel.BuzzType.NO_BUZZ) {
+                buzz(buzzType.pattern)
+                viewModel.onBuzzComplete()
+            }
         }
 
         return binding.root

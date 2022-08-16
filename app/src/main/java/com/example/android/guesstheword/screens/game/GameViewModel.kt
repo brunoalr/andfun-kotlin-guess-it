@@ -94,8 +94,6 @@ class GameViewModel : ViewModel() {
         nextWord()
         _score.value = 0
 
-        _eventBuzz.value = BuzzType.CORRECT
-
         // Creates a timer which triggers the end of the game when it finishes
         timer = object : CountDownTimer(COUNTDOWN_TIME, ONE_SECOND) {
 
@@ -106,6 +104,7 @@ class GameViewModel : ViewModel() {
             override fun onFinish() {
                 _currentTime.value = DONE
                 _eventGameFinish.value = true
+                _eventBuzz.value = BuzzType.GAME_OVER
             }
         }
 
@@ -162,6 +161,7 @@ class GameViewModel : ViewModel() {
 
     fun onCorrect() {
         _score.value = (_score.value)?.plus(1)
+        _eventBuzz.value = BuzzType.CORRECT
         nextWord()
     }
 
